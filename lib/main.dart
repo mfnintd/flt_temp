@@ -2,8 +2,104 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'todo.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const MaterialApp(
+      home: Hehe(),
+    ),
+  );
+}
+
+class Hehe extends StatelessWidget {
+  const Hehe({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Flexible(
+            flex: 2,
+            //fit: FlexFit.tight,
+            child: Container(
+              color: Colors.red,
+            ),
+          ),
+          const Spacer(flex: 2),
+          Expanded(
+            flex: 1,
+            child: Container(color: Colors.blue),
+          ),
+          Flexible(
+            flex: 1,
+            child: Container(color: Colors.green),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FirstRoute extends StatelessWidget {
+  FirstRoute({super.key});
+
+  final List<Todo> todos = List.generate(10, (index) => Todo(title: 'Todo $index', des: 'Tôi yêu bạn $index lần'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('First Route'),
+      ),
+      body: ListView.builder(
+        itemCount: todos.length,
+        itemBuilder: (context, index) => InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SecondRoute(todo: todos[index]),
+              ),
+            );
+          },
+          child: ListTile(
+            title: Text(todos[index].title),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SecondRoute extends StatelessWidget {
+  const SecondRoute({
+    super.key,
+    required this.todo,
+  });
+  final Todo todo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(todo.title),
+      ),
+      body: Column(
+        children: [
+          Text(todo.des),
+          ElevatedButton(
+            onPressed: () {
+              // Navigate back to first route when tapped.
+              Navigator.pop(context);
+            },
+            child: const Text('Go back!'),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class MyApp extends StatefulWidget {
